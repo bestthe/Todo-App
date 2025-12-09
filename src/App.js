@@ -1,7 +1,59 @@
+import React, { useEffect, useState } from 'react';
 import './App.css';
 import { Journals, Trash3Fill, Trash3 } from 'react-bootstrap-icons';
 
 function App() {
+  const time = new Date();
+  const year = String(time.getFullYear());
+  const month = String(time.getMonth() + 1).padStart(2, '0');
+  const day = String(time.getDate()).padStart(2, '0');
+
+  const today = `${year}.${month}.${day}`;
+
+  const [todos, setTodos] = useState([]);
+  const [popupOpen, setPopupOpen] = useState(false);
+  const [popupAnim, setPopupAnim] = useState(false);
+  const [currentIdx, setCurrentIdx] = useState(null);
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    const todo = e.target.addlist.value.trim();
+    if (!todo) return;
+
+    setTodos((prev) => [
+      ...prev,
+      { id: Date.now(), text: todo, check: false, active: false },
+    ]);
+
+    setTimeout(() => {
+      setTodos((prev) =>
+        prev.map((t, idx2) =>
+          idx2 === prev.length - 1 ? { ...t, active: true } : t
+        )
+      );
+    }, 200);
+
+    e.target.addlist.value = '';
+  };
+
+  const openPopup = (id) => {
+    setCurrentIdx(id);
+    setPopupOpen(true);
+
+    setTimeout(() => {
+      setPopupAnim(true);
+    }, 10);
+  };
+
+  const closePopup = () => {
+    setPopupAnim(false);
+    setTimeout(() => setPopupOpen(false), 300);
+  };
+
+  const handelDelete = (id) => {
+    setTodos((prev) => prev.filter((todo) => todo.id !== id));
+  };
+
   return (
     <div className="App">
       <div id="todo">
@@ -27,7 +79,7 @@ function App() {
               <h2>TodoList App</h2>
               <p>추가하고 싶으신 TodoList 목록을 자유롭게 추가해 보세요</p>
             </div>
-            <form className="add_todo">
+            <form className="add_todo" onSubmit={(e) => handleSubmit(e)}>
               <input
                 type="text"
                 name="addlist"
@@ -42,19 +94,38 @@ function App() {
             <div className="todos">
               <div className="todo_days">
                 <div className="line"></div>
-                <div className="day">2025.12.08 Todos</div>
+                <div className="day">2025.12.09 Todos</div>
                 <div className="line"></div>
               </div>
+
               <ul className="todoLists">
-                <li>
-                  <button type="button" className="check_btn">
-                    <div className="chek_shape"></div>
-                    <div className="real_todo">sample1</div>
-                  </button>
-                  <button type="button" className="delete_btn">
-                    <Trash3Fill size={18} color="#999" />
-                  </button>
-                </li>
+                {todos.map((todo) => (
+                  <li key={todo.id} className={todo.active ? 'active' : ''}>
+                    <button type="button" className="check_btn">
+                      <div className="chek_shape"></div>
+                      <div className="real_todo">{todo.text}</div>
+                    </button>
+                    <button
+                      type="button"
+                      className="delete_btn"
+                      onClick={() => openPopup(todo.id)}
+                    >
+                      <Trash3Fill size={18} color="#999" />
+                    </button>
+
+                    {popupOpen && currentIdx === todo.id && (
+                      <div className={`dle_popup ${popupAnim ? 'active' : ''}`}>
+                        <p>정말 삭제하시겠습니까?</p>
+                        <div className="btns">
+                          <button onClick={() => handelDelete(currentIdx)}>
+                            확인
+                          </button>
+                          <button onClick={closePopup}>취소</button>
+                        </div>
+                      </div>
+                    )}
+                  </li>
+                ))}
               </ul>
             </div>
           </div>
