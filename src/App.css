@@ -139,7 +139,7 @@ textarea {
   padding: 0 30px;
   border-radius: 30px;
   border: 1px solid #e3e3e3;
-  font-size: 14px;
+  font-size: 16px;
   cursor: auto;
 }
 
@@ -449,8 +449,7 @@ textarea {
 
   #addlist {
     padding: 0 20px;
-    font-size: 13px;
-    height: 40px;
+    height: 50px;
   }
 
   .content_header h2 {
@@ -461,13 +460,8 @@ textarea {
     font-size: 13px;
   }
 
-  .addBtn,
-  .real_todo {
+  .addBtn {
     font-size: 14px;
-  }
-
-  .todoLists li {
-    min-height: 50px;
   }
 
   .todos {
@@ -492,5 +486,9 @@ textarea {
 @media (max-width: 330px) {
   .todo_contents {
     min-width: 310px;
+  }
+
+  .delete_btn {
+    right: 20px;
   }
 }
