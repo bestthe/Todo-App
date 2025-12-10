@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import './App.css';
-import { Journals, Trash3Fill, Trash3 } from 'react-bootstrap-icons';
+import { Journals, Trash3Fill } from 'react-bootstrap-icons';
 
 function App() {
   const time = new Date();
@@ -10,10 +10,20 @@ function App() {
 
   const today = `${year}.${month}.${day}`;
 
-  const [todos, setTodos] = useState([]);
+  const [todos, setTodos] = useState(() => {
+    const savedTodos = localStorage.getItem('todo');
+    return savedTodos ? JSON.parse(savedTodos) : [];
+  });
   const [popupOpen, setPopupOpen] = useState(false);
   const [popupAnim, setPopupAnim] = useState(false);
   const [currentIdx, setCurrentIdx] = useState(null);
+
+  const groupedTodos = todos.reduce((acc, todo) => {
+    const date = todo.date || today;
+    if (!acc[date]) acc[date] = [];
+    acc[date].push(todo);
+    return acc;
+  }, {});
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -21,16 +31,16 @@ function App() {
     if (!todo) return;
 
     setTodos((prev) => [
+      { id: Date.now(), text: todo, check: false, active: false, date: today },
       ...prev,
-      { id: Date.now(), text: todo, check: false, active: false },
     ]);
 
     setTimeout(() => {
-      setTodos((prev) =>
-        prev.map((t, idx2) =>
-          idx2 === prev.length - 1 ? { ...t, active: true } : t
-        )
-      );
+      setTodos((prev) => {
+        const newTodos = [...prev];
+        newTodos[0] = { ...newTodos[0], active: true };
+        return newTodos;
+      });
     }, 200);
 
     e.target.addlist.value = '';
@@ -53,6 +63,16 @@ function App() {
   const handelDelete = (id) => {
     setTodos((prev) => prev.filter((todo) => todo.id !== id));
   };
+
+  const handleCheck = (id) => {
+    setTodos((prev) =>
+      prev.map((t) => (t.id === id ? { ...t, check: !t.check } : t))
+    );
+  };
+
+  useEffect(() => {
+    localStorage.setItem('todo', JSON.stringify(todos));
+  }, [todos]);
 
   return (
     <div className="App">
@@ -92,41 +112,65 @@ function App() {
             </form>
 
             <div className="todos">
-              <div className="todo_days">
-                <div className="line"></div>
-                <div className="day">2025.12.09 Todos</div>
-                <div className="line"></div>
-              </div>
+              {Object.keys(groupedTodos)
+                .sort((a, b) => (a < b ? 1 : -1))
+                .map((date) => (
+                  <div key={date} className="todo_days_group">
+                    <div className="todo_days">
+                      <div className="line"></div>
+                      <div className="day">{date} Todos</div>
+                      <div className="line"></div>
+                    </div>
 
-              <ul className="todoLists">
-                {todos.map((todo) => (
-                  <li key={todo.id} className={todo.active ? 'active' : ''}>
-                    <button type="button" className="check_btn">
-                      <div className="chek_shape"></div>
-                      <div className="real_todo">{todo.text}</div>
-                    </button>
-                    <button
-                      type="button"
-                      className="delete_btn"
-                      onClick={() => openPopup(todo.id)}
-                    >
-                      <Trash3Fill size={18} color="#999" />
-                    </button>
-
-                    {popupOpen && currentIdx === todo.id && (
-                      <div className={`dle_popup ${popupAnim ? 'active' : ''}`}>
-                        <p>정말 삭제하시겠습니까?</p>
-                        <div className="btns">
-                          <button onClick={() => handelDelete(currentIdx)}>
-                            확인
+                    <ul className="todoLists">
+                      {groupedTodos[date].map((todo) => (
+                        <li
+                          key={todo.id}
+                          className={[
+                            todo.active && 'active',
+                            todo.check && 'checked',
+                          ]
+                            .filter(Boolean)
+                            .join(' ')}
+                        >
+                          <button
+                            type="button"
+                            className="check_btn"
+                            onClick={() => handleCheck(todo.id)}
+                          >
+                            <div className="chek_shape"></div>
+                            <div className="real_todo">{todo.text}</div>
                           </button>
-                          <button onClick={closePopup}>취소</button>
-                        </div>
-                      </div>
-                    )}
-                  </li>
+                          <button
+                            type="button"
+                            className="delete_btn"
+                            onClick={() => openPopup(todo.id)}
+                          >
+                            <Trash3Fill size={18} color="#999" />
+                          </button>
+
+                          {popupOpen && currentIdx === todo.id && (
+                            <div
+                              className={`dle_popup ${
+                                popupAnim ? 'active' : ''
+                              }`}
+                            >
+                              <p>정말 삭제하시겠습니까?</p>
+                              <div className="btns">
+                                <button
+                                  onClick={() => handelDelete(currentIdx)}
+                                >
+                                  확인
+                                </button>
+                                <button onClick={closePopup}>취소</button>
+                              </div>
+                            </div>
+                          )}
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
                 ))}
-              </ul>
             </div>
           </div>
         </div>

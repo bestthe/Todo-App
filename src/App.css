@@ -214,6 +214,42 @@ textarea {
   text-align: left;
 }
 
+.todoLists li.checked {
+  animation: clickFlash 650ms ease-out forwards;
+  transition: all 0.35s ease-out;
+  box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.15);
+}
+
+@keyframes clickFlash {
+  0% {
+    background-color: rgba(80, 73, 229, 0.95);
+  }
+  100% {
+    background-color: rgba(80, 73, 229, 0);
+  }
+}
+
+.todoLists li.checked .check_btn,
+.todoLists li.checked .delete_btn {
+  animation: opacityPulse 650ms ease forwards;
+  animation-delay: 350ms;
+  opacity: 0;
+}
+
+.todoLists li.checked .real_todo {
+  color: #999;
+  text-decoration: line-through;
+}
+
+@keyframes opacityPulse {
+  0% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 1;
+  }
+}
+
 .chek_shape {
   position: absolute;
   left: 15px;
@@ -223,6 +259,32 @@ textarea {
   height: 20px;
   border-radius: 50%;
   border: 1px solid #e3e3e3;
+  transition: ease 0.3s;
+}
+
+.chek_shape::after {
+  content: '';
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -60%) rotate(45deg) scale(0);
+  width: 4px;
+  height: 10px;
+  border-right: 2px solid #fff;
+  border-bottom: 2px solid #fff;
+  border-radius: 2px;
+  opacity: 0;
+  transition: transform 0.32s cubic-bezier(0.2, 0.9, 0.2, 1), opacity 0.2s ease;
+}
+
+.todoLists li.checked .chek_shape {
+  border: 0;
+  background-color: var(--main-color);
+}
+
+.todoLists li.checked .chek_shape::after {
+  transform: translate(-50%, -60%) rotate(45deg) scale(1);
+  opacity: 1;
 }
 
 .delete_btn {
@@ -237,6 +299,7 @@ textarea {
 .real_todo {
   font-size: 16px;
   color: #333;
+  transition: ease 0.3s;
 }
 
 /* 삭제 팝업 */
