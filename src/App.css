@@ -193,7 +193,7 @@ textarea {
 .todoLists li {
   position: relative;
   display: flex;
-  align-items: center;
+  align-items: stretch;
   min-height: 55px;
   height: auto;
   border-radius: 30px;
@@ -211,6 +211,9 @@ textarea {
 }
 
 .check_btn {
+  flex: 1;
+  display: flex;
+  align-items: center;
   width: 100%;
   height: 100%;
   padding: 0 50px;
