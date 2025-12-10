@@ -3,6 +3,14 @@ import './App.css';
 import { Journals, Trash3Fill } from 'react-bootstrap-icons';
 
 function App() {
+  function setVh() {
+    let vh = window.innerHeight * 0.01;
+    document.documentElement.style.setProperty('--vh', `${vh * 100}px`);
+  }
+
+  window.addEventListener('resize', setVh);
+  setVh();
+
   const time = new Date();
   const today = `${time.getFullYear()}.${String(time.getMonth() + 1).padStart(
     2,

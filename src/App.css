@@ -6,6 +6,11 @@
   font-family: 'Roboto', 'Noto Sans KR', sans-serif;
 }
 
+body,
+html {
+  height: 100%;
+}
+
 a {
   text-decoration: none;
   color: inherit;
@@ -39,7 +44,7 @@ textarea {
 /* Todo App 전체 */
 #todo {
   width: 100%;
-  height: 100vh;
+  height: var(--vh);
   background: var(--bgcolor);
 }
 
