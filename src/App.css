@@ -51,7 +51,7 @@ textarea {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  gap: 150px;
+  gap: clamp(30px, 8vw, 150px);
 }
 
 /* 좌측 텍스트 박스 */
@@ -92,6 +92,7 @@ textarea {
 /* 우측 Todo Contents */
 .todo_contents {
   width: 45%;
+  min-width: 550px;
   height: 100%;
   background-color: #fff;
   border-radius: 30px 30px 0 0;
@@ -147,6 +148,7 @@ textarea {
   background-color: var(--main-color);
   color: #fff;
   font-weight: bold;
+  min-width: 70px;
 }
 
 /* Todo 리스트 */
@@ -192,7 +194,8 @@ textarea {
   position: relative;
   display: flex;
   align-items: center;
-  height: 55px;
+  min-height: 55px;
+  height: auto;
   border-radius: 30px;
   border: 1px solid #e3e3e3;
   box-shadow: 0 4px 10px rgba(0, 0, 0, 0.04);
@@ -336,4 +339,151 @@ textarea {
   gap: 10px;
   color: #fff;
   font-size: 14px;
+}
+
+/* TodoList mediaQuery */
+@media (max-width: 1500px) {
+  .todo_wrap {
+    padding: 150px 40px 0;
+  }
+}
+
+@media (max-width: 1300px) {
+  .todo_wrap {
+    padding: 150px 60px 0;
+  }
+
+  .todo_title {
+    font-size: 40px;
+    gap: 15px;
+    margin-bottom: 40px;
+  }
+
+  .todo_title svg {
+    width: 60px;
+    height: 60px;
+  }
+
+  .todo_hi {
+    font-size: 70px;
+  }
+}
+
+@media (max-width: 1200px) {
+  .todo_wrap {
+    padding: 150px 50px 0;
+  }
+
+  .todo_title {
+    font-size: 35px;
+    gap: 10px;
+    margin-bottom: 35px;
+  }
+
+  .todo_title svg {
+    width: 55px;
+    height: 55px;
+  }
+
+  .todo_hi {
+    font-size: 60px;
+  }
+
+  .todo_subtitle {
+    font-size: 18px;
+  }
+
+  .todo_contents {
+    min-width: 500px;
+    padding: 80px 30px 30px;
+  }
+}
+
+@media (max-width: 1024px) {
+  .todo_textbox {
+    display: none;
+  }
+
+  .todo_contents {
+    width: 100%;
+    padding: 80px 50px 50px;
+  }
+
+  .todo_wrap {
+    padding-top: 100px;
+  }
+}
+
+@media (max-width: 600px) {
+  .todo_wrap {
+    padding: 30px 30px 0;
+  }
+
+  .todo_contents {
+    padding: 50px 30px;
+    min-width: 320px;
+  }
+}
+
+@media (max-width: 500px) {
+  .todo_wrap {
+    padding: 10px 10px 0;
+  }
+
+  .todo_contents {
+    padding: 50px 20px;
+  }
+}
+
+@media (max-width: 400px) {
+  .todo_contents {
+    padding: 50px 15px;
+  }
+
+  #addlist {
+    padding: 0 20px;
+    font-size: 13px;
+    height: 40px;
+  }
+
+  .content_header h2 {
+    font-size: 25px;
+  }
+
+  .content_header p {
+    font-size: 13px;
+  }
+
+  .addBtn,
+  .real_todo {
+    font-size: 14px;
+  }
+
+  .todoLists li {
+    min-height: 50px;
+  }
+
+  .todos {
+    margin-top: 30px;
+  }
+}
+
+@media (max-width: 360px) {
+  .todo_contents {
+    padding: 30px 10px;
+  }
+
+  .todo_wrap {
+    padding: 5px 5px 0;
+  }
+
+  .content_header p {
+    font-size: 12px;
+  }
+}
+
+@media (max-width: 330px) {
+  .todo_contents {
+    min-width: 310px;
+  }
 }

@@ -4,11 +4,10 @@ import { Journals, Trash3Fill } from 'react-bootstrap-icons';
 
 function App() {
   const time = new Date();
-  const year = String(time.getFullYear());
-  const month = String(time.getMonth() + 1).padStart(2, '0');
-  const day = String(time.getDate()).padStart(2, '0');
-
-  const today = `${year}.${month}.${day}`;
+  const today = `${time.getFullYear()}.${String(time.getMonth() + 1).padStart(
+    2,
+    '0'
+  )}.${String(time.getDate()).padStart(2, '0')}`;
 
   const [todos, setTodos] = useState(() => {
     const savedTodos = localStorage.getItem('todo');
