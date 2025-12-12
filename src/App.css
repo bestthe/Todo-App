@@ -215,6 +215,10 @@ textarea {
   transform: translateY(0);
 }
 
+.todo_days_group {
+  margin-bottom: 40px;
+}
+
 .check_btn {
   flex: 1;
   display: flex;
